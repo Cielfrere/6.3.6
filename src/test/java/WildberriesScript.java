@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
@@ -16,6 +17,11 @@ public class WildberriesScript {
     @BeforeAll
     public static void setUp() {
         driver = Options.option();
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        driver.quit();
     }
 
     @Test
@@ -50,11 +56,11 @@ public class WildberriesScript {
         WebElement cartItem = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-wba-header-name='Cart']")));
         Thread.sleep(5000);
 
-        if (cartItem.isDisplayed()) {
-            logger.info("Товар успешно добавлен в корзину");
+        if (!cartItem.isDisplayed()) {
+            throw new RuntimeException("Не удалось добавить товар в корзину");
+
         } else {
-            logger.error("Не удалось добавить товар в корзину.");
+            logger.info("Товар успешно добавлен в корзину");
         }
-        driver.quit();
     }
 }
